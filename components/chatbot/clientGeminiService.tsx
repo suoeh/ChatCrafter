@@ -30,6 +30,7 @@ const isLocalStorageAvailable = () => {
     window.localStorage.removeItem(testKey);
     return true;
   } catch (e) {
+    console.error('Error accessing localStorage:', e);
     return false;
   }
 };
@@ -78,7 +79,7 @@ export const useClientGeminiService = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [chatHistory, setChatHistory] = useState<StoredMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
-  const messageCallbacksRef = useRef<((message: any) => void)[]>([]);
+  const messageCallbacksRef = useRef<((message: string) => void)[]>([]);
   const sessionIdRef = useRef<string>(
     // retrieves or makes new session ID from localStorage
     safeGetItem('gemini-session-id') || Math.random().toString(36).substring(2, 15)
@@ -251,7 +252,7 @@ export const useClientGeminiService = () => {
   }, [geminiService]);
   
   // register a callback to be notified when a message is received
-  const onMessage = useCallback((callback: (message: any) => void) => {
+  const onMessage = useCallback((callback: (message: string) => void) => {
     messageCallbacksRef.current.push(callback);
     
     // return a function to remove the callback

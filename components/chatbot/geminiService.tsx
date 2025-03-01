@@ -1,12 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 
-declare global {
-  interface Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
-  }
-}
-
 // type definitions
 interface ChatSession {
   history: Array<{

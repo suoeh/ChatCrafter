@@ -4,12 +4,12 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Send, Settings, User } from "lucide-react"
+import { User } from "lucide-react"
 import { motion } from "framer-motion"
 
 import { ChatBot } from "@/components/chatbot/chatbot"
@@ -47,12 +47,10 @@ export default function ChatbotCustomizer() {
     chatColor: "#95a489",
     accentColor: "#909a7e",
   })
-  const [previewMessage, setPreviewMessage] = useState("")
-  const [chatMessages, setChatMessages] = useState([{ role: "assistant", content: "Hello! How can I help you today?" }])
+
   const [isLoaded, setIsLoaded] = useState(false)
   const [isCompressing, setIsCompressing] = useState(false)
-  const [imageStats, setImageStats] = useState<{ original: number; compressed: number } | null>(null)
-
+  
   useEffect(() => {
     setIsLoaded(true)
   }, [])
@@ -71,32 +69,13 @@ export default function ChatbotCustomizer() {
     setIsCompressing(true)
     try {
       const compressedImage = await compressImage(file)
-
-      // Calculate sizes
-      const originalSize = file.size / 1024 // KB
-      const compressedSize = (compressedImage.length * 0.75) / 1024 // KB (base64 to binary ratio is ~4:3)
-
-      setImageStats({
-        original: Math.round(originalSize),
-        compressed: Math.round(compressedSize),
-      })
-
+      
       handleSettingChange("profilePhoto", compressedImage)
     } catch (error) {
       console.error("Error compressing image:", error)
     } finally {
       setIsCompressing(false)
     }
-  }
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    setChatMessages([
-      ...chatMessages,
-      { role: "user", content: previewMessage },
-      { role: "assistant", content: "This is a response to your message." },
-    ])
-    setPreviewMessage("")
   }
 
   // Animation variants
