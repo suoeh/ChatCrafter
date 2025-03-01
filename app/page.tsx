@@ -219,15 +219,7 @@ export default function ChatbotCustomizer() {
             transition={{ duration: 0.5 }}
             className="mt-8"
           >
-            <Button
-              className="w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
-              style={{ backgroundColor: settings.accentColor }}
-              onClick={() => {
-                alert("Feature not implemented yet!")
-              }}
-            >
-              Save Chatbot
-            </Button>
+            
           </motion.div>
         </motion.div>
       </div>
