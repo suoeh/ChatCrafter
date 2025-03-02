@@ -4,7 +4,6 @@ import React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Mic, X, Send, MessageSquare, RotateCcw, ImagePlus } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { clsx, type ClassValue } from "clsx"
@@ -85,48 +84,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 )
 Input.displayName = "Input"
 
-// avatar component
-const Avatar = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-      className
-    )}
-    {...props}
-  />
-))
-Avatar.displayName = AvatarPrimitive.Root.displayName
 
-const AvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image
-    ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    {...props}
-  />
-))
-AvatarImage.displayName = AvatarPrimitive.Image.displayName
-
-const AvatarFallback = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Fallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Fallback
-    ref={ref}
-    className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted",
-      className
-    )}
-    {...props}
-  />
-))
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
 // message datatype
 type Message = {
@@ -549,6 +507,16 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
     }
   }
 
+  const handleOpenChat = () => {
+    // Immediately hide the button through direct DOM manipulation
+    if (buttonRef.current) {
+      buttonRef.current.style.display = 'none';
+    }
+    
+    // Then update state (this happens asynchronously)
+    setIsOpen(true);
+  }
+
   // chatbot component
   return (
     <div className="fixed bottom-6 right-6 z-50 chatbot" style={{ background: 'transparent' }}>
@@ -585,12 +553,23 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
           >
             
             {/* header */}
-            <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center justify-between p-4 border-b"
+            style={{
+              backgroundColor: accentColor,
+            }}
+            >
               <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={profilePhoto} alt="Bot" />
-                  <AvatarFallback>AI</AvatarFallback>
-                </Avatar>
+                <div className="relative h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+                  <img 
+                    src={profilePhoto} 
+                    alt="Bot"
+                    className="h-full w-full object-cover"
+                  />
+                  {/* fallback */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {!profilePhoto && <img src="favicon.ico" alt="Bot" className="h-full w-full object-cover bg-gray-100" />}
+                  </div>
+                </div>
                 <div>
                   <h3 className="font-medium">{name}</h3>
                   <p className="text-xs text-gray-500">{description}</p>
@@ -599,7 +578,7 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
               
               <div className="flex gap-2">
 
-                {/* nw chat button */}
+                {/* new chat button */}
                 <motion.button
                   onClick={startNewChat}
                   className="p-2 text-gray-500 hover:text-gray-700 rounded-full focus:outline-none"
@@ -728,9 +707,11 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Type your message..."
                     disabled={isRecording}
-                    className={`flex-1 ${isRecording ? "opacity-50" : ""}`}
+                    className={`flex-1 transition-all duration-300 ${isRecording ? "opacity-50" : ""}`}
                     style={{
-                      borderColor: inputMessage ? (chatColor || '#000000') : 'transparent'
+                      borderColor: "#DDDDDD",
+                      outline: "none",
+                      boxShadow: inputMessage ? `0 0 0 1px ${chatColor}` : 'none',
                     }}
                   />
                 </form>
@@ -806,12 +787,10 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
                 {/* send button */}
                 <motion.button
                   className={`p-2 ${(!inputMessage.trim() || isRecording) ? 
-                    "bg-gray-400 text-gray-300 cursor-not-allowed" : 
+                    "text-gray-300 cursor-not-allowed" : 
                     "text-white transition-colors duration-300"} rounded-md focus:outline-none`}
                   style={
-                    (!inputMessage.trim() || isRecording) 
-                      ? {} 
-                      : { backgroundColor: chatColor || '#488888' }
+                    { backgroundColor: chatColor || '#488888' }
                   }
                   whileHover={(inputMessage.trim() && !isRecording) ? {
                     scale: 1.2,
@@ -850,7 +829,11 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.85 }}
           className="text-gray-500 hover:text-gray-700 rounded-full w-14 h-14 flex items-center justify-center"
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpenChat}
+          style={{ 
+            transition: 'none',
+            animation: 'none'
+          }}
         >
           <MessageSquare className="w-6 h-6" />
         </motion.button>
@@ -858,4 +841,3 @@ export function ChatBot({name, description, profilePhoto, developerPrompt, chatC
     </div>
   )
 }
-

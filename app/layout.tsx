@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Chat Crafter",
-  description: "Customize your chatbot settings",
+  description: "Turn your ideas into a chatbot without any coding experience",
 }
 
 export default function RootLayout({
