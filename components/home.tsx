@@ -94,7 +94,7 @@ export default function Home({ settings, setSettings }: HomeProps) {
       <motion.h1 className="text-3xl font-bold mb-12 text-center" variants={itemVariants}>
         <p className="text-5xl font-bold mb-12">Chat Crafter</p>
         <p className="text-xl font-normal text-gray-600 text-center">Customize your ideas into a chatbot without <strong>ANY coding experience</strong>.</p>
-        <p className="text-xl font-normal text-gray-600 text-center">Try out your creation in the bottom right corner.</p>
+        <p className="text-xl font-normal text-gray-600 text-center">Test your creation by clicking the icon in the bottom right corner.</p>
       </motion.h1>
 
       <div className="gap-8 my-10">
