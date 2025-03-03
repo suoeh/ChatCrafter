@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User } from "lucide-react"
 import { motion } from "framer-motion"
-import { Button } from "./ui/button";
 
 interface HomeProps {
   settings: {
