@@ -214,26 +214,7 @@ export default function Home({ settings, setSettings }: HomeProps) {
         </motion.div>
       </div>
 
-      <div className="flex space-x-2">
-        <Button
-          className="w-full transition-all text-black duration-300 shadow-md transform hover:-translate-y-0.5"
-          style={{ backgroundColor: settings.accentColor }}
-          onClick={() => {
-            alert("Feature not implemented yet!")
-          }}
-        >
-          Example Preview
-        </Button>
-        <Button
-          className="w-full transition-all text-black duration-300 shadow-md transform hover:-translate-y-0.5"
-          style={{ backgroundColor: settings.accentColor }}
-          onClick={() => {
-            alert("Another feature not implemented yet!")
-          }}
-        >
-          Download Chatbot
-        </Button>
-      </div>
+      
     </motion.div>
   )
 }
