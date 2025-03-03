@@ -22,7 +22,7 @@ export default function Footer() {
           <Github className="w-6 h-6 transition-colors duration-300 ease hover:text-gray-700" />
         </a>
         <a
-          href="https://example.com"
+          href="https://dylandai.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
           className="transition-all duration-300 ease hover:scale-[1.3]"
